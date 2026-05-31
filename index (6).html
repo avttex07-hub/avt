@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="theme-color" content="#0a0a0a">
+<title>Mrithula Collection — Login</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg0:#0a0a0a; --bg1:#141414; --bg2:#1c1c1c; --bg3:#242424; --bg4:#2e2e2e;
+  --border:rgba(255,255,255,0.08); --border2:rgba(255,255,255,0.14);
+  --text0:#f0ede8; --text1:#c8c4be; --text2:#8a8680; --text3:#5a5754;
+  --accent:#e8b84b; --accent-dim:rgba(232,184,75,0.12); --accent-text:#f5c96e;
+  --green:#4caf7d; --red:#e05c5c; --red-dim:rgba(224,92,92,0.12);
+  --radius:10px; --radius-sm:6px; --radius-lg:16px;
+  --font:'Poppins',sans-serif; --mono:'DM Mono',monospace; --heading:'League Spartan',sans-serif;
+  --shadow:0 4px 24px rgba(0,0,0,0.5);
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html,body {
+  font-family:var(--font); background:var(--bg0); color:var(--text0);
+  height:100%; overflow:hidden; -webkit-font-smoothing:antialiased;
+}
+
+/* Background pattern */
+body::before {
+  content:'';
+  position:fixed; inset:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(232,184,75,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(232,184,75,0.04) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
+}
+
+/* Grid texture */
+body::after {
+  content:'';
+  position:fixed; inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
+  background-size:40px 40px;
+  pointer-events:none; z-index:0;
+}
+
+/* ── MAIN LAYOUT ── */
+#login-wrap {
+  position:relative; z-index:1;
+  display:flex; align-items:center; justify-content:center;
+  min-height:100vh; padding:20px;
+}
+
+.login-box {
+  width:100%; max-width:400px;
+  background:var(--bg1);
+  border:1px solid var(--border2);
+  border-radius:24px;
+  padding:36px 32px;
+  box-shadow:0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+  animation:boxIn 0.5s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes boxIn {
+  from { opacity:0; transform:translateY(24px) scale(0.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* ── BRAND ── */
+.login-brand {
+  display:flex; flex-direction:column; align-items:center;
+  margin-bottom:32px; gap:10px;
+}
+.login-logo {
+  width:56px; height:56px;
+  background:linear-gradient(135deg, var(--accent) 0%, #f5a623 100%);
+  border-radius:16px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px;
+  box-shadow:0 8px 24px rgba(232,184,75,0.3);
+}
+.login-store-name {
+  font-family:var(--heading);
+  font-size:22px; font-weight:700;
+  color:var(--text0); letter-spacing:-0.5px;
+  text-align:center; line-height:1.2;
+}
+.login-store-sub {
+  font-size:11.5px; color:var(--text3);
+  font-family:var(--mono); letter-spacing:0.06em;
+  text-align:center;
+}
+
+/* ── FORM ── */
+.form-group { margin-bottom:16px; }
+.form-label {
+  display:block; font-size:11.5px; font-weight:500;
+  color:var(--text2); margin-bottom:6px;
+  text-transform:uppercase; letter-spacing:0.06em;
+}
+.input-wrap { position:relative; }
+.input-icon {
+  position:absolute; left:13px; top:50%;
+  transform:translateY(-50%);
+  font-size:15px; pointer-events:none;
+  color:var(--text3);
+}
+.form-control {
+  width:100%; background:var(--bg2);
+  border:1.5px solid var(--border);
+  color:var(--text0); padding:12px 12px 12px 40px;
+  border-radius:var(--radius); font-family:var(--font);
+  font-size:14px; outline:none;
+  transition:border-color 0.18s ease, box-shadow 0.18s ease;
+  -webkit-appearance:none; appearance:none;
+}
+.form-control:focus {
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(232,184,75,0.12);
+}
+.form-control::placeholder { color:var(--text3); }
+
+/* PIN input */
+#pin-input {
+  letter-spacing:6px; font-size:18px;
+  font-family:var(--mono); text-align:center;
+  padding-left:12px;
+}
+
+/* ── PIN DOTS ── */
+.pin-dots {
+  display:flex; justify-content:center; gap:12px;
+  margin:8px 0 0;
+}
+.pin-dot {
+  width:10px; height:10px; border-radius:50%;
+  background:var(--bg4); border:1.5px solid var(--border2);
+  transition:all 0.15s ease;
+}
+.pin-dot.filled {
+  background:var(--accent);
+  border-color:var(--accent);
+  box-shadow:0 0 8px rgba(232,184,75,0.4);
+}
+
+/* ── PIN PAD ── */
+.pin-pad {
+  display:grid; grid-template-columns:repeat(3,1fr);
+  gap:8px; margin:16px 0;
+}
+.pin-key {
+  background:var(--bg2); border:1px solid var(--border);
+  border-radius:var(--radius); color:var(--text0);
+  font-family:var(--heading); font-size:20px; font-weight:600;
+  padding:16px 8px; cursor:pointer;
+  transition:all 0.12s ease;
+  display:flex; align-items:center; justify-content:center;
+  user-select:none; -webkit-tap-highlight-color:transparent;
+  min-height:56px;
+}
+.pin-key:hover { background:var(--bg3); border-color:var(--border2); }
+.pin-key:active { background:var(--accent-dim); border-color:var(--accent); transform:scale(0.96); }
+.pin-key.wide { grid-column:span 2; font-size:14px; font-family:var(--font); font-weight:500; }
+.pin-key.del { font-size:18px; }
+
+/* ── SUBMIT BTN ── */
+.login-btn {
+  width:100%; padding:14px;
+  background:var(--accent); border:none;
+  border-radius:var(--radius); color:#0a0a0a;
+  font-family:var(--heading); font-size:15px; font-weight:700;
+  cursor:pointer; letter-spacing:-0.2px;
+  transition:all 0.18s ease;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  -webkit-tap-highlight-color:transparent;
+}
+.login-btn:hover { background:#f5c96e; transform:translateY(-1px); box-shadow:0 8px 24px rgba(232,184,75,0.25); }
+.login-btn:active { transform:scale(0.98); }
+.login-btn:disabled { opacity:0.45; cursor:not-allowed; transform:none; box-shadow:none; }
+.login-btn.loading::after {
+  content:''; width:16px; height:16px;
+  border:2px solid rgba(0,0,0,0.3); border-top-color:#000;
+  border-radius:50%; animation:spin 0.7s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* ── ERROR ── */
+.error-msg {
+  display:none; background:var(--red-dim);
+  border:1px solid rgba(224,92,92,0.3); border-radius:var(--radius-sm);
+  padding:10px 14px; font-size:12.5px; color:var(--red);
+  margin-bottom:14px; text-align:center;
+  animation:shakeX 0.4s ease;
+}
+.error-msg.show { display:block; }
+@keyframes shakeX {
+  0%,100%{transform:translateX(0);}
+  20%{transform:translateX(-6px);}
+  40%{transform:translateX(6px);}
+  60%{transform:translateX(-4px);}
+  80%{transform:translateX(4px);}
+}
+
+/* ── LOCKOUT ── */
+.lockout-msg {
+  display:none; background:rgba(224,92,92,0.08);
+  border:1px solid rgba(224,92,92,0.2); border-radius:var(--radius-sm);
+  padding:12px 14px; font-size:12px; color:var(--text2);
+  margin-bottom:14px; text-align:center;
+}
+.lockout-msg.show { display:block; }
+.lockout-countdown { font-family:var(--mono); color:var(--red); font-weight:600; font-size:14px; }
+
+/* ── FOOTER ── */
+.login-footer {
+  text-align:center; margin-top:20px;
+  font-size:11px; color:var(--text3); font-family:var(--mono);
+}
+
+/* ── MODE SWITCH (username vs PIN pad) ── */
+.input-mode-toggle {
+  display:flex; gap:0; background:var(--bg2);
+  border:1px solid var(--border); border-radius:var(--radius-sm);
+  overflow:hidden; margin-bottom:20px;
+}
+.mode-btn {
+  flex:1; padding:8px; font-size:12px; font-weight:500;
+  cursor:pointer; color:var(--text2); text-align:center;
+  transition:all 0.15s ease; user-select:none;
+  font-family:var(--font);
+}
+.mode-btn.active { background:var(--accent-dim); color:var(--accent-text); }
+
+/* ── DIVIDER ── */
+.divider {
+  display:flex; align-items:center; gap:10px;
+  margin:16px 0; color:var(--text3); font-size:11px;
+}
+.divider::before,.divider::after {
+  content:''; flex:1; height:1px; background:var(--border);
+}
+
+/* Mobile adjustments */
+@media(max-width:480px) {
+  .login-box { padding:28px 20px; border-radius:20px; }
+  .pin-key { padding:14px 8px; font-size:18px; min-height:52px; }
+}
+</style>
+</head>
+<body>
+
+<div id="login-wrap">
+  <div class="login-box">
+
+    <!-- Brand -->
+    <div class="login-brand">
+      <div class="login-logo">👗</div>
+      <div class="login-store-name">Mrithula Collection</div>
+      <div class="login-store-sub">TAMBARAM · POINT OF SALE</div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-msg" id="error-msg">❌ Invalid username or PIN</div>
+    <div class="lockout-msg" id="lockout-msg">
+      🔒 Too many failed attempts.<br>
+      Try again in <span class="lockout-countdown" id="lockout-timer">30</span>s
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <div class="input-wrap">
+        <span class="input-icon">👤</span>
+        <input type="text" class="form-control" id="username-input"
+               placeholder="Enter your username"
+               autocomplete="username" autocorrect="off"
+               autocapitalize="none" spellcheck="false">
+      </div>
+    </div>
+
+    <!-- PIN dots display -->
+    <div class="form-group">
+      <label class="form-label">4-Digit PIN</label>
+      <div class="pin-dots" id="pin-dots">
+        <div class="pin-dot" id="dot-0"></div>
+        <div class="pin-dot" id="dot-1"></div>
+        <div class="pin-dot" id="dot-2"></div>
+        <div class="pin-dot" id="dot-3"></div>
+      </div>
+    </div>
+
+    <!-- PIN Pad -->
+    <div class="pin-pad" id="pin-pad">
+      <div class="pin-key" onclick="pinPress('1')">1</div>
+      <div class="pin-key" onclick="pinPress('2')">2</div>
+      <div class="pin-key" onclick="pinPress('3')">3</div>
+      <div class="pin-key" onclick="pinPress('4')">4</div>
+      <div class="pin-key" onclick="pinPress('5')">5</div>
+      <div class="pin-key" onclick="pinPress('6')">6</div>
+      <div class="pin-key" onclick="pinPress('7')">7</div>
+      <div class="pin-key" onclick="pinPress('8')">8</div>
+      <div class="pin-key" onclick="pinPress('9')">9</div>
+      <div class="pin-key wide" onclick="pinClear()">Clear</div>
+      <div class="pin-key" onclick="pinPress('0')">0</div>
+      <div class="pin-key del" onclick="pinDelete()">⌫</div>
+    </div>
+
+    <!-- Login button -->
+    <button class="login-btn" id="login-btn" onclick="doLogin()" disabled>
+      Sign In
+    </button>
+
+    <div class="login-footer">
+      Mrithula Collection POS · v2.0
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── CONFIG ──────────────────────────────────────────────────
+// Replace with your actual Apps Script URL
+const SCRIPT_URL = localStorage.getItem('mc_script_url') || '';
+
+const SESSION_HOURS  = 8;      // Auto-logout after 8 hours
+const MAX_ATTEMPTS   = 5;      // Lockout after 5 wrong tries
+const LOCKOUT_SECS   = 30;     // Lockout duration in seconds
+
+// ── STATE ────────────────────────────────────────────────────
+let pinValue       = '';
+let isLoading      = false;
+let failedAttempts = parseInt(localStorage.getItem('mc_failed_attempts') || '0');
+let lockoutUntil   = parseInt(localStorage.getItem('mc_lockout_until')   || '0');
+let lockoutTimer   = null;
+
+// ── ON LOAD: check existing session ─────────────────────────
+window.addEventListener('load', () => {
+  checkExistingSession();
+  checkLockout();
+  document.getElementById('username-input').addEventListener('input', validateForm);
+});
+
+function checkExistingSession() {
+  const session = getSession();
+  if (!session) return;
+
+  const age = Date.now() - session.loginTime;
+  const maxAge = SESSION_HOURS * 60 * 60 * 1000;
+
+  if (age < maxAge) {
+    // Valid session — redirect immediately
+    redirectByRole(session.role);
+  } else {
+    // Expired
+    clearSession();
+  }
+}
+
+// ── PIN PAD LOGIC ────────────────────────────────────────────
+function pinPress(digit) {
+  if (pinValue.length >= 4 || isLocked()) return;
+  pinValue += digit;
+  updateDots();
+  validateForm();
+  // Auto-submit when 4 digits entered
+  if (pinValue.length === 4) {
+    const user = document.getElementById('username-input').value.trim();
+    if (user) setTimeout(doLogin, 120);
+  }
+}
+
+function pinDelete() {
+  if (!pinValue.length) return;
+  pinValue = pinValue.slice(0, -1);
+  updateDots();
+  validateForm();
+}
+
+function pinClear() {
+  pinValue = '';
+  updateDots();
+  validateForm();
+}
+
+function updateDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('dot-' + i);
+    dot.classList.toggle('filled', i < pinValue.length);
+  }
+}
+
+function validateForm() {
+  const user = document.getElementById('username-input').value.trim();
+  const btn  = document.getElementById('login-btn');
+  btn.disabled = !(user.length > 0 && pinValue.length === 4) || isLocked();
+}
+
+// Keyboard support for PIN
+document.addEventListener('keydown', e => {
+  const focused = document.activeElement;
+  if (focused === document.getElementById('username-input')) return;
+  if (e.key >= '0' && e.key <= '9') pinPress(e.key);
+  if (e.key === 'Backspace') pinDelete();
+  if (e.key === 'Enter') doLogin();
+});
+
+// ── LOCKOUT ──────────────────────────────────────────────────
+function isLocked() {
+  return Date.now() < lockoutUntil;
+}
+
+function checkLockout() {
+  if (!isLocked()) {
+    document.getElementById('lockout-msg').classList.remove('show');
+    clearInterval(lockoutTimer);
+    return;
+  }
+  showLockout();
+}
+
+function showLockout() {
+  document.getElementById('lockout-msg').classList.add('show');
+  document.getElementById('login-btn').disabled = true;
+  updateLockoutTimer();
+  lockoutTimer = setInterval(() => {
+    if (!isLocked()) {
+      clearInterval(lockoutTimer);
+      document.getElementById('lockout-msg').classList.remove('show');
+      failedAttempts = 0;
+      localStorage.setItem('mc_failed_attempts', '0');
+      validateForm();
+    } else {
+      updateLockoutTimer();
+    }
+  }, 1000);
+}
+
+function updateLockoutTimer() {
+  const remaining = Math.ceil((lockoutUntil - Date.now()) / 1000);
+  document.getElementById('lockout-timer').textContent = Math.max(0, remaining);
+}
+
+// ── LOGIN ────────────────────────────────────────────────────
+async function doLogin() {
+  if (isLoading || isLocked()) return;
+
+  const username = document.getElementById('username-input').value.trim().toLowerCase();
+  const pin      = pinValue;
+
+  if (!username || pin.length !== 4) return;
+
+  hideError();
+  setLoading(true);
+
+  try {
+    let user = null;
+
+    // Try fetching from Google Sheet first
+    if (SCRIPT_URL) {
+      user = await fetchUserFromSheet(username, pin);
+    }
+
+    // Fallback: check offline cache
+    if (!user) {
+      user = checkOfflineCache(username, pin);
+    }
+
+    if (user && user.active !== false) {
+      onLoginSuccess(user);
+    } else {
+      onLoginFail();
+    }
+
+  } catch (err) {
+    console.warn('Login error:', err);
+    // Try offline cache on network error
+    const cached = checkOfflineCache(username, pin);
+    if (cached) {
+      onLoginSuccess(cached);
+    } else {
+      showError('⚠️ Network error. Check connection and retry.');
+    }
+  } finally {
+    setLoading(false);
+  }
+}
+
+async function fetchUserFromSheet(username, pin) {
+  const url = `${SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&pin=${encodeURIComponent(pin)}`;
+  const res  = await fetch(url, { cache: 'no-store' });
+  if (!res.ok) return null;
+  const data = await res.json();
+  if (data.success && data.user) return data.user;
+  return null;
+}
+
+function checkOfflineCache(username, pin) {
+  const cached = localStorage.getItem('mc_users_cache');
+  if (!cached) return null;
+  try {
+    const users = JSON.parse(cached);
+    return users.find(u =>
+      u.username.toLowerCase() === username &&
+      String(u.pin) === pin &&
+      u.active !== false
+    ) || null;
+  } catch { return null; }
+}
+
+// ── SUCCESS / FAIL ───────────────────────────────────────────
+function onLoginSuccess(user) {
+  // Reset failed attempts
+  failedAttempts = 0;
+  localStorage.setItem('mc_failed_attempts', '0');
+
+  // Save session
+  const session = {
+    username  : user.username,
+    name      : user.name,
+    role      : user.role,
+    loginTime : Date.now()
+  };
+  localStorage.setItem('mc_session', JSON.stringify(session));
+
+  // Update offline cache if online
+  if (SCRIPT_URL) cacheUsers();
+
+  // Redirect
+  redirectByRole(user.role);
+}
+
+function onLoginFail() {
+  pinClear();
+  failedAttempts++;
+  localStorage.setItem('mc_failed_attempts', String(failedAttempts));
+
+  if (failedAttempts >= MAX_ATTEMPTS) {
+    lockoutUntil = Date.now() + LOCKOUT_SECS * 1000;
+    localStorage.setItem('mc_lockout_until', String(lockoutUntil));
+    showLockout();
+  } else {
+    const left = MAX_ATTEMPTS - failedAttempts;
+    showError(`❌ Invalid username or PIN — ${left} attempt${left !== 1 ? 's' : ''} left`);
+  }
+}
+
+function redirectByRole(role) {
+  if (role === 'admin') {
+    window.location.href = 'admin.html';
+  } else {
+    window.location.href = 'pos.html';
+  }
+}
+
+// ── CACHE USERS FOR OFFLINE ──────────────────────────────────
+async function cacheUsers() {
+  try {
+    const url  = `${SCRIPT_URL}?action=getUsers`;
+    const res  = await fetch(url);
+    const data = await res.json();
+    if (data.users) {
+      localStorage.setItem('mc_users_cache', JSON.stringify(data.users));
+    }
+  } catch {}
+}
+
+// ── SESSION HELPERS ──────────────────────────────────────────
+function getSession() {
+  try { return JSON.parse(localStorage.getItem('mc_session')); }
+  catch { return null; }
+}
+function clearSession() { localStorage.removeItem('mc_session'); }
+
+// ── UI HELPERS ───────────────────────────────────────────────
+function setLoading(val) {
+  isLoading = val;
+  const btn = document.getElementById('login-btn');
+  btn.disabled = val;
+  btn.textContent = val ? '' : 'Sign In';
+  btn.classList.toggle('loading', val);
+}
+function showError(msg) {
+  const el = document.getElementById('error-msg');
+  el.textContent = msg; el.classList.add('show');
+}
+function hideError() {
+  document.getElementById('error-msg').classList.remove('show');
+}
+
+// ── AUTO-FOCUS USERNAME ──────────────────────────────────────
+window.addEventListener('load', () => {
+  setTimeout(() => document.getElementById('username-input').focus(), 300);
+});
+</script>
+</body>
+</html>
