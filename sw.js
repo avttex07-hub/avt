@@ -3,7 +3,7 @@
 //  Handles offline caching & PWA install
 // ============================================================
 
-const CACHE_NAME = 'mrithula-pos-v3';
+const CACHE_NAME = 'mrithula-pos-v4';
 
 const PRECACHE_FILES = [
   './',
