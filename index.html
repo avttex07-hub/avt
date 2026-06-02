@@ -257,7 +257,7 @@ body::after {
 
     <!-- Brand -->
     <div class="login-brand">
-      <div class="login-logo">👗</div>
+      <div class="login-logo" id="logo-tap" onclick="logoTap()" style="cursor:default;">👗</div>
       <div class="login-store-name">Mrithula Collection</div>
       <div class="login-store-sub">TAMBARAM · POINT OF SALE</div>
     </div>
@@ -313,8 +313,15 @@ body::after {
       Sign In
     </button>
 
+    <!-- Hidden reset panel (tap logo 5× to reveal) -->
+    <div id="reset-panel" style="display:none; margin-top:14px; background:rgba(224,92,92,0.08); border:1px solid rgba(224,92,92,0.25); border-radius:8px; padding:12px 14px; text-align:center;">
+      <div style="font-size:12px; color:#c8c4be; margin-bottom:10px;">⚙️ Admin Reset</div>
+      <button onclick="resetLockout()" style="width:100%; padding:10px; background:#e05c5c; border:none; border-radius:8px; color:#fff; font-size:13px; font-weight:600; cursor:pointer; font-family:var(--font);">🔓 Clear Lockout &amp; Failed Attempts</button>
+      <button onclick="document.getElementById('reset-panel').style.display='none';logoTapCount=0;" style="width:100%; margin-top:6px; padding:8px; background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:8px; color:#8a8680; font-size:12px; cursor:pointer; font-family:var(--font);">Cancel</button>
+    </div>
+
     <div class="login-footer">
-      Mrithula Collection POS · v2.0
+      Mrithula Collection POS · v2.1
     </div>
 
   </div>
@@ -594,6 +601,34 @@ function hideError() {
 window.addEventListener('load', () => {
   setTimeout(() => document.getElementById('username-input').focus(), 300);
 });
+
+// ── EMERGENCY RESET (tap logo 5×) ────────────────────────────
+let logoTapCount = 0;
+let logoTapTimer = null;
+
+function logoTap() {
+  logoTapCount++;
+  clearTimeout(logoTapTimer);
+  logoTapTimer = setTimeout(() => { logoTapCount = 0; }, 3000); // reset if 3s pass
+  if (logoTapCount >= 5) {
+    logoTapCount = 0;
+    document.getElementById('reset-panel').style.display = 'block';
+  }
+}
+
+function resetLockout() {
+  localStorage.removeItem('mc_failed_attempts');
+  localStorage.removeItem('mc_lockout_until');
+  failedAttempts = 0;
+  lockoutUntil   = 0;
+  clearInterval(lockoutTimer);
+  document.getElementById('reset-panel').style.display = 'none';
+  document.getElementById('lockout-msg').classList.remove('show');
+  pinClear();
+  validateForm();
+  showError('✅ Lockout cleared. Staff can log in now.');
+  setTimeout(hideError, 3000);
+}
 </script>
 </body>
 </html>
