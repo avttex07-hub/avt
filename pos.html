@@ -703,7 +703,12 @@ function checkSession() {
   } catch { session = null; }
 
   if (!session) {
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
+    return;
+  }
+
+  if (session.role === 'admin') {
+    window.location.href = 'admin.html';
     return;
   }
 
