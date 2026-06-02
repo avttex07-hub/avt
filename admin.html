@@ -552,11 +552,6 @@ textarea.form-control{resize:vertical;min-height:60px;}
     -webkit-overflow-scrolling: touch !important;
     max-height: 50vh !important;
   }
-  function adminLogout() {
-  if(!confirm('Log out?')) return;
-  localStorage.removeItem('mc_session');
-  window.location.href = 'index.html';
-}
 }
 
 </style>
@@ -639,8 +634,7 @@ textarea.form-control{resize:vertical;min-height:60px;}
     <span class="topbar-title" id="page-title">Dashboard</span>
     <div class="topbar-actions">
       <span class="sync-info"><span class="sync-dot" id="sync-dot"></span><span id="sync-label">Synced</span></span>
-      <button class="btn btn-sm" onclick="navigate('eod')" title="End of Day">🏦 EOD</button>
-<button class="btn btn-sm" onclick="adminLogout()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8a8680;">🚪 Logout</button>
+      <button class="btn btn-sm" onclick="navigate('eod')" title="End of Day">🏦 EOD</button><button onclick="adminLogout()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);color:#8a8680;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:12px;margin-left:6px;">🚪 Logout</button>
       <button class="btn btn-primary btn-sm" onclick="navigate('pos')">+ New Sale</button>
     </div>
   </div>
@@ -2804,6 +2798,12 @@ if('serviceWorker' in navigator){
       .then(()=>console.log('SW ready'))
       .catch(e=>console.warn('SW failed',e));
   });
+}
+
+function adminLogout() {
+  if(!confirm('Log out?')) return;
+  localStorage.removeItem('mc_session');
+  window.location.href = 'index.html';
 }
 </script>
 </body>
